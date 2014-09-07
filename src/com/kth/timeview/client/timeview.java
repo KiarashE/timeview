@@ -2,6 +2,7 @@ package com.kth.timeview.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.i18n.client.Constants;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.core.client.JsonUtils;
@@ -14,6 +15,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.http.client.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
@@ -44,16 +48,24 @@ public class timeview implements EntryPoint {
         //
         RootPanel.get("slot1").add(button);
         RootPanel.get("slot2").add(label);
-        RootPanel.get("slot3").add(getTest());
+        RootPanel.get("slot3").add(getLocationDropDown());
+
     }
 
 
-    public final Label getTest(){
+    public static final String URL = "http://127.0.0.1:5984/schemareport/_design/acttype/_view/actbycode";
 
-        String url = "http://127.0.0.1:5984/schemareport/_design/acttype/_view/actbycode";
+    public VerticalPanel getLocationDropDown(){
+        initRemoteIndata(URL);
+
+
+        return vpanel;
+    }
+
+    public void initRemoteIndata(String url){
+
         RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
 
-        final Label label = new Label("halo halo");
 
         try {
 
@@ -63,46 +75,71 @@ public class timeview implements EntryPoint {
                     exception.printStackTrace();
                 }
 
+
+                JSONArray jsonArray;
                 public void onResponseReceived(Request request, Response response) {
                     if (200 == response.getStatusCode()) {
-                        // Process the response in response.getText()
 
-                        System.out.println("#######test2 " + response.getText());
+
+                        // Process the response in response.getText()
+                        JSONValue jsonValue = JSONParser.parseStrict(response.getText());
+                        JSONObject jsonObject = jsonValue.isObject();
+                        jsonValue = jsonObject.get("rows");
+                        jsonArray = jsonValue.isArray();
+
+                        labeldd.setText(jsonArray.toString());
+
+                        ArrayList<String> testArray = new ArrayList<String>();
+                        for(int i = 0; i < jsonArray.size(); i++){
+                            System.out.println(jsonArray.get(i).isObject().get("key").isString().stringValue());
+                            System.out.println(jsonArray.get(i).isObject().get("value").isObject().get("name_sv")
+                                    .isString().stringValue());
+
+                            oracle.add(jsonArray.get(i).isObject().get("value").isObject().get("name_sv")
+                                    .isString().stringValue());
+
+                            testArray.add(jsonArray.get(i).isObject().get("value").isObject().get("name_sv")
+                                    .isString().stringValue());
+                        }
+
+
+
+                        oracle.setDefaultSuggestionsFromText(testArray);
+
+                        suggestBox = new SuggestBox(oracle);
+                        suggestBox.ensureDebugId("cwSuggestBox");
+                        suggestBox.setText("Aktivitetstyp");
+                        suggestBox.setAutoSelectEnabled(true);
+
+                        vpanel.add(new HTML("Aktivitetstyp"));
+                        vpanel.add(suggestBox);
+
+
+
+
+
                     } else {
                         // Handle the error.  Can get the status text from response.getStatusText()
-                        System.out.println("########test3 " + response.getStatusText());
-                        System.out.println("########alotest ");
 
                     }
-
-                    System.out.println("vad det fuck. something should happen");
-                    JSONValue jsonValue = JSONParser.parseStrict(response.getText());
-                    JSONObject jsonObject = jsonValue.isObject();
-                    jsonValue = jsonObject.get("rows");
-                    JSONArray jsonArray = jsonValue.isArray();
-
-
-
-
-                    label.setText(jsonArray.toString());
                 }
             });
         } catch (RequestException e) {
             // Couldn't connect to server
             e.printStackTrace();
         }
-        System.out.println("#######test4");
 
 
-
-        return label;
     }
 
 
 
+    public final VerticalPanel vpanel = new VerticalPanel();
+    public final Label labeldd = new Label();
 
-
-
+    public final ArrayList<JSONArray> indataList = new ArrayList<JSONArray>();
+    public MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+    public SuggestBox suggestBox;
 
 
 
@@ -122,3 +159,5 @@ public class timeview implements EntryPoint {
         }
     }
 }
+
+
