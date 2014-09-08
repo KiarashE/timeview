@@ -10,5 +10,7 @@ public interface GeneralResources extends ClientBundle {
     public static final GeneralResources INSTANCE = GWT.create(GeneralResources.class);
 
     @Source("timeview.css")
-    public CssResources timeviewStyle();
+    public CssSource timeviewStyle();
+
+
 }

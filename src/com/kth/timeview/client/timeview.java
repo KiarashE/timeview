@@ -10,7 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.http.client.*;
-import com.kth.timeview.client.resources.CssResources;
+import com.kth.timeview.client.resources.CssSource;
 import com.kth.timeview.client.resources.GeneralResources;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class timeview implements EntryPoint {
 
     public static GeneralResources resources;
-    public static CssResources css;
+    public static CssSource css;
     public static final String URL = "http://127.0.0.1:5984/schemareport/_design/acttype/_view/actbycode";
 
     public void onModuleLoad() {
