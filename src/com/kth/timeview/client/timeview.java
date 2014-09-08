@@ -1,33 +1,35 @@
 package com.kth.timeview.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.i18n.client.Constants;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.http.client.*;
+import com.kth.timeview.client.resources.CssResources;
+import com.kth.timeview.client.resources.GeneralResources;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>
  */
 public class timeview implements EntryPoint {
 
-    /**
-     * This is the entry point method.
-     */
+    public static GeneralResources resources;
+    public static CssResources css;
+    public static final String URL = "http://127.0.0.1:5984/schemareport/_design/acttype/_view/actbycode";
+
     public void onModuleLoad() {
+
+        resources = GeneralResources.INSTANCE; //GWT.create(GeneralResources.class);
+        resources.timeviewStyle().ensureInjected();
+        css = resources.timeviewStyle();
+
         final Button button = new Button("Click me");
         final Label label = new Label();
 
@@ -51,9 +53,6 @@ public class timeview implements EntryPoint {
         RootPanel.get("slot3").add(getLocationDropDown());
 
     }
-
-
-    public static final String URL = "http://127.0.0.1:5984/schemareport/_design/acttype/_view/actbycode";
 
     public VerticalPanel getLocationDropDown(){
         initRemoteIndata(URL);
@@ -91,9 +90,8 @@ public class timeview implements EntryPoint {
 
                         ArrayList<String> testArray = new ArrayList<String>();
                         for(int i = 0; i < jsonArray.size(); i++){
-                            System.out.println(jsonArray.get(i).isObject().get("key").isString().stringValue());
-                            System.out.println(jsonArray.get(i).isObject().get("value").isObject().get("name_sv")
-                                    .isString().stringValue());
+                            //System.out.println(jsonArray.get(i).isObject().get("key").isString().stringValue());
+                            //System.out.println(jsonArray.get(i).isObject().get("value").isObject().get("name_sv").isString().stringValue());
 
                             oracle.add(jsonArray.get(i).isObject().get("value").isObject().get("name_sv")
                                     .isString().stringValue());

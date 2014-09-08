@@ -9,6 +9,14 @@
         <servlet-name>com.kth.timeview.timeview timeviewService</servlet-name>
         <servlet-class>com.kth.timeview.server.timeviewServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>com.kth.timeview.timeview timeviewService</servlet-name>
+        <servlet-class>com.kth.timeview.server.timeviewServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>com.kth.timeview.timeview timeviewService</servlet-name>
+        <url-pattern>/timeview/timeviewService</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>com.kth.timeview.timeview timeviewService</servlet-name>
         <url-pattern>/timeview/timeviewService</url-pattern>
