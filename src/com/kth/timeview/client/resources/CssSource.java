@@ -68,6 +68,7 @@ public interface CssSource extends CssResource {
     @ClassName("suggestPopupBottomLeft")
     String suggestPopupBottomLeft();
 
+
     @ClassName("suggestPopupBottomRight")
     String suggestPopupBottomRight();
 
